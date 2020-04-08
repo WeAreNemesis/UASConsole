@@ -14,6 +14,7 @@ import com.cg.uas.dao.ProgramsOfferedDaoImpl;
 import com.cg.uas.dao.ProgramsScheduledDaoImpl;
 import com.cg.uas.dao.UserDaoImpl;
 import com.cg.uas.exception.ApplicationAlreadyExistsException;
+import com.cg.uas.exception.AuthenticationfailedException;
 import com.cg.uas.exception.InvalidDateException;
 import com.cg.uas.exception.InvalidProgramException;
 import com.cg.uas.exception.NoProgramsAvailableException;
@@ -41,14 +42,14 @@ public class UniversityApp {
 		while (run) {
 
 			System.out.println("Welcome to Hogwarts University  ");
-			System.out.println("--------------------------------");
-			System.out.println("1.View Scheduled Programs:      ");
-			System.out.println("2.Apply Online:					");
-			System.out.println("3.View Application Status:		");
-			System.out.println("4.Login as admin: 				");
-			System.out.println("5.Login as MAC: 				");
-			System.out.println("6.exit                          ");
-
+			System.out.println("+-----------------------------------+");
+			System.out.println("|	1.View Scheduled Programs:  |");
+			System.out.println("|	2.Apply Online:		|");
+			System.out.println("|	3.View Application Status:		|");
+			System.out.println("|	4.Login as admin: 			|");
+			System.out.println("|	5.Login as MAC: 			|");
+			System.out.println("|	6.exit                       		|");
+			System.out.println("+-----------------------------------+");
 			int choice;
 			try {
 				choice = s.nextInt();
@@ -79,12 +80,13 @@ public class UniversityApp {
 					String loginId = s.next();
 					System.out.println("Enter the password:");
 					String password = s.next();
-					AdministrationService as = AdministrationServiceImpl.getAdminService(loginId, password);
-					if (as == null) {
-						System.out.println("Invalid login id or password");
-						break authenticationAdmin;
-					} else {
+					AdministrationService as;
+					try {
+						as = AdministrationServiceImpl.getAdminService(loginId, password);
 						AdminServicesFunction(as, s);
+					} catch (AuthenticationfailedException e) {
+						System.out.println(e.getMessage());
+						break authenticationAdmin;
 					}
 				}
 				break;
@@ -94,13 +96,13 @@ public class UniversityApp {
 					String loginId = s.next();
 					System.out.println("Enter the password:");
 					String password = s.next();
-					MemberOfAdmissionCommittee moac = MemberOfAdmissionCommitteeImpl.getMemberService(loginId,
-							password);
-					if (moac == null) {
-						System.out.println("Invalid login id or password");
-						break authenticationMac;
-					} else {
+					MemberOfAdmissionCommittee moac;
+					try {
+						moac = MemberOfAdmissionCommitteeImpl.getMemberService(loginId, password);
 						macServices(moac, s);
+					} catch (AuthenticationfailedException e) {
+						System.out.println(e.getMessage());
+						break authenticationMac;
 					}
 				}
 				break;
@@ -173,7 +175,7 @@ public class UniversityApp {
 					if (resultOfUpdate) {
 						System.out.println("Application : " + applicationIdToUpdateStatus + " update successful.");
 					} else {
-						System.out.println("Application : " + applicationIdToUpdateStatus + " update error occured");
+						System.out.println("Application : " + applicationIdToUpdateStatus + " update unauthorized");
 					}
 				} catch (NoSuchApplication e) {
 					System.out.println(e.getMessage());

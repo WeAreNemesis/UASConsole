@@ -16,6 +16,7 @@ import com.cg.uas.dao.ApplicationDaoImpl;
 import com.cg.uas.dao.ProgramsOfferedDaoImpl;
 import com.cg.uas.dao.ProgramsScheduledDaoImpl;
 import com.cg.uas.dao.UserDaoImpl;
+import com.cg.uas.exception.AuthenticationfailedException;
 import com.cg.uas.exception.InvalidDateException;
 import com.cg.uas.exception.InvalidProgramException;
 import com.cg.uas.exception.NoSuchApplication;
@@ -42,17 +43,24 @@ public class AdministrationServiceImpl implements AdministrationService {
 		if (u != null && u.getPassword().equals(pass) && u.getRole().equalsIgnoreCase("admin")) {
 			logger.info("authenticated");
 			return true;
+		} else {
+			logger.info("admin auth error.");
+			throw new AuthenticationfailedException();
 		}
-		return false;
+
 	};
 
-	public static AdministrationServiceImpl getAdminService(String loginId, String password) {
+	public static AdministrationServiceImpl getAdminService(String loginId, String password) throws AuthenticationfailedException {
 		PropertyConfigurator.configure("src/main/resources/log4j/log4j.properties");
-		boolean auth = val.authenticate(loginId, password);
-		if (auth) {
-			asi = new AdministrationServiceImpl();
+		try {
+			boolean auth = val.authenticate(loginId, password);
+			if (auth) {
+				asi = new AdministrationServiceImpl();
+			}
+			return asi;
+		} catch (AuthenticationfailedException e) {
+			throw e;
 		}
-		return asi;
 	}
 
 	@Override

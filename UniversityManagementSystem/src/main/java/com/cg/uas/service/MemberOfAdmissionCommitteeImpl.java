@@ -9,6 +9,7 @@ import com.cg.uas.bean.Application;
 import com.cg.uas.bean.User;
 import com.cg.uas.dao.ApplicationDaoImpl;
 import com.cg.uas.dao.UserDaoImpl;
+import com.cg.uas.exception.AuthenticationfailedException;
 import com.cg.uas.exception.NoSuchApplication;
 
 public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommittee {
@@ -20,20 +21,27 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 
 	}
 
-	public static MemberOfAdmissionCommitteeImpl getMemberService(String loginId, String password) {
+	public static MemberOfAdmissionCommitteeImpl getMemberService(String loginId, String password) throws AuthenticationfailedException {
 		ValidationService val = (user, pass) -> {
 			User u = udi.readUser(user);
 			if (u != null && u.getPassword().equals(pass) && u.getRole().equalsIgnoreCase("mac")) {
 				return true;
+			}else {
+				throw new AuthenticationfailedException();
 			}
-			return false;
 		};
 
-		boolean auth = val.authenticate(loginId, password);
-		if (auth) {
-			credentials = new MemberOfAdmissionCommitteeImpl();
+		boolean auth;
+		try {
+			auth = val.authenticate(loginId, password);
+			if (auth) {
+				credentials = new MemberOfAdmissionCommitteeImpl();
+			}
+			return credentials;
+		} catch (AuthenticationfailedException e) {
+			throw e;
 		}
-		return credentials;
+
 	}
 
 	@Override
@@ -55,6 +63,8 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 		case 1:
 			if (a.getStatus().equalsIgnoreCase("Accepted")) {
 				a.setStatus("Confirmed");
+			}else {
+				return false;
 			}
 			break;
 		case 2:
@@ -63,12 +73,14 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 		case 3:
 			if (a.getStatus().equalsIgnoreCase("Pending")) {
 				a.setStatus("Accepted");
+			}else {
+				return false;
 			}
 			break;
 		default:
 			return false;
 		}
-		
+
 		try {
 			return adi.updateApplication(applicationId, a);
 		} catch (NoSuchApplication e) {
