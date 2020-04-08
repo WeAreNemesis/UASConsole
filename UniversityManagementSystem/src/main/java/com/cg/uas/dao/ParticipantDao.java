@@ -1,5 +1,7 @@
 package com.cg.uas.dao;
 
+import java.util.ArrayList;
+
 import com.cg.uas.bean.Participant;
 import com.cg.uas.exception.NoSuchParticipant;
 import com.cg.uas.exception.ParticipantAlreadyExistsException;
@@ -12,4 +14,6 @@ public interface ParticipantDao {//shailesh
 	boolean updateParticipant(String rollNo, Participant p) throws NoSuchParticipant;
 
 	boolean deleteParticipant(String rollNo) throws NoSuchParticipant;
+	
+	ArrayList<Participant> getAll();
 }

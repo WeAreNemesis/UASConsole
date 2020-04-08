@@ -1,5 +1,6 @@
 package com.cg.uas.ui;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.cg.uas.bean.Application;
+import com.cg.uas.bean.Participant;
 import com.cg.uas.bean.ProgramsOffered;
 import com.cg.uas.bean.ProgramsScheduled;
 import com.cg.uas.dao.ApplicationDaoImpl;
@@ -126,7 +128,8 @@ public class UniversityApp {
 			System.out.println("1.View applications of a specific program:");
 			System.out.println("2.Accept and schedule date of interview:");
 			System.out.println("3.Confirm or Reject the application:");
-			System.out.println("4.exit");
+			System.out.println("4.View Participants of a program:");
+			System.out.println("5.exit");
 			System.out.println("----------------------------------------");
 			int choice;
 
@@ -184,6 +187,11 @@ public class UniversityApp {
 				}
 				break;
 			case 4:
+				System.out.println("Enter the program id:");
+				String scheduledProgram = s.next();
+				moac.getParticipants(scheduledProgram).forEach((p) -> System.out.println(p));
+				break;
+			case 5:
 				run = false;
 				break;
 			default:

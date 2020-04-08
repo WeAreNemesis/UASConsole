@@ -1,6 +1,9 @@
 package com.cg.uas.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -43,7 +46,7 @@ public class ParticipantDaoImpl implements ParticipantDao {
 	}
 
 	@Override
-	public boolean updateParticipant(String rollNo, Participant p) throws NoSuchParticipant {
+	public boolean updateParticipant(String rollNo, Participant p) {
 		if (participants.containsKey(rollNo)) {
 			Participant result = participants.put(rollNo, p);
 
@@ -56,7 +59,7 @@ public class ParticipantDaoImpl implements ParticipantDao {
 			}
 		} else {
 			logger.info("Participant with roll no: " + rollNo + " not found");
-			throw new NoSuchParticipant();
+			return false;
 		}
 
 	}
@@ -81,16 +84,19 @@ public class ParticipantDaoImpl implements ParticipantDao {
 	// mockdata
 	// to insert data
 	public void mockData() {
-		participants.put("101", new Participant("1001", "123@gmail.com", "101", "10"));
-		participants.put("102", new Participant("1002", "124@gmail.com", "102", "11"));
-		participants.put("103", new Participant("1003", "125@gmail.com", "103", "12"));
-		participants.put("104", new Participant("1004", "126@gmail.com", "104", "13"));
-		participants.put("105", new Participant("1005", "127@gmail.com", "105", "14"));
+		participants.put("1001", new Participant("1001", "siddharth@gmail.com", "3", "A1003"));
+		participants.put("1002", new Participant("1002", "siddharth2@gmail.com", "4", "A1004"));
 	}
 
 	// to print full map
 	public void print() {
 		System.out.println(participants);
+	}
+
+	@Override
+	public ArrayList<Participant> getAll() {
+		List<Participant> result = participants.values().stream().collect(Collectors.toList());
+		return new ArrayList<Participant>(result);
 	}
 
 }

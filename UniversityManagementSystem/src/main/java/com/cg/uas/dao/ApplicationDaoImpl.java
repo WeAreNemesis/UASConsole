@@ -114,7 +114,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 		applications.put("3", new Application("3", "Siddharth", LocalDate.parse("1997-12-27"), "12th", 60,
 				"Aim to be a Developer", "siddharth@gmail.com", "A1003", "Confirmed", LocalDate.parse("2018-12-27")));
 		applications.put("4", new Application("4", "Siddharth", LocalDate.parse("1997-12-27"), "12th", 60,
-				"Aim to be a Artist", "siddharth@gmail.com", "A1004", "Accepted", LocalDate.parse("2018-12-27")));
+				"Aim to be a Artist", "siddharth2@gmail.com", "A1004", "Confirmed", LocalDate.parse("2018-12-27")));
 		applications.put("5", new Application("5", "Siddharth", LocalDate.parse("1997-12-27"), "12th", 60,
 				"Aim to be a Doctor ", "siddharth@gmail.com", "A1005", "Rejected", LocalDate.parse("2018-12-27")));
 	}

@@ -6,27 +6,34 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.cg.uas.bean.Application;
+import com.cg.uas.bean.Participant;
 import com.cg.uas.bean.User;
 import com.cg.uas.dao.ApplicationDaoImpl;
+import com.cg.uas.dao.ParticipantDaoImpl;
 import com.cg.uas.dao.UserDaoImpl;
 import com.cg.uas.exception.AuthenticationfailedException;
 import com.cg.uas.exception.NoSuchApplication;
+import com.cg.uas.exception.NoSuchParticipant;
+import com.cg.uas.exception.ParticipantAlreadyExistsException;
 
 public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommittee {
 	private static MemberOfAdmissionCommitteeImpl credentials = null;
 	private static UserDaoImpl udi = new UserDaoImpl();
 	private static ApplicationDaoImpl adi = new ApplicationDaoImpl();
+	private static ParticipantDaoImpl pdi = new ParticipantDaoImpl();
+	private static int rollNo = 1003;
 
 	private MemberOfAdmissionCommitteeImpl() {
 
 	}
 
-	public static MemberOfAdmissionCommitteeImpl getMemberService(String loginId, String password) throws AuthenticationfailedException {
+	public static MemberOfAdmissionCommitteeImpl getMemberService(String loginId, String password)
+			throws AuthenticationfailedException {
 		ValidationService val = (user, pass) -> {
 			User u = udi.readUser(user);
 			if (u != null && u.getPassword().equals(pass) && u.getRole().equalsIgnoreCase("mac")) {
 				return true;
-			}else {
+			} else {
 				throw new AuthenticationfailedException();
 			}
 		};
@@ -63,7 +70,7 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 		case 1:
 			if (a.getStatus().equalsIgnoreCase("Accepted")) {
 				a.setStatus("Confirmed");
-			}else {
+			} else {
 				return false;
 			}
 			break;
@@ -73,7 +80,7 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 		case 3:
 			if (a.getStatus().equalsIgnoreCase("Pending")) {
 				a.setStatus("Accepted");
-			}else {
+			} else {
 				return false;
 			}
 			break;
@@ -82,7 +89,27 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 		}
 
 		try {
-			return adi.updateApplication(applicationId, a);
+			boolean result = adi.updateApplication(applicationId, a);
+			if (result && a.getStatus().equalsIgnoreCase("confirmed")) {
+				String rollNum = Integer.toString(rollNo);
+				Participant p = new Participant(rollNum, a.getEmailId(), a.getApplicationId(),
+						a.getScheduledProgramId());
+				try {
+					result = pdi.createParticipant(p);
+					if (result) {
+						rollNo++;
+						return true;
+					} else {
+						return false;
+					}
+				} catch (ParticipantAlreadyExistsException e) {
+					return pdi.updateParticipant(p.getRollNo(), p);
+				}
+			} else if (result) {
+				return true;
+			} else {
+				return false;
+			}
 		} catch (NoSuchApplication e) {
 			throw e;
 		}
@@ -103,6 +130,14 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 			throw new NoSuchApplication();
 		}
 		return false;
+	}
+
+	@Override
+	public ArrayList<Participant> getParticipants(String scheduledProgramId) {
+		List<Participant> result = pdi.getAll().stream().filter((p) -> {
+			return p.getScheduledProgramId().equalsIgnoreCase(scheduledProgramId);
+		}).collect(Collectors.toList());
+		return new ArrayList<Participant>(result);
 	}
 
 }
