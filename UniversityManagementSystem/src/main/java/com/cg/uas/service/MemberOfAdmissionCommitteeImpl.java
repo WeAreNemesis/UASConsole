@@ -12,6 +12,7 @@ import com.cg.uas.dao.ApplicationDaoImpl;
 import com.cg.uas.dao.ParticipantDaoImpl;
 import com.cg.uas.dao.UserDaoImpl;
 import com.cg.uas.exception.AuthenticationfailedException;
+import com.cg.uas.exception.InvalidUserException;
 import com.cg.uas.exception.NoSuchApplication;
 import com.cg.uas.exception.NoSuchParticipant;
 import com.cg.uas.exception.ParticipantAlreadyExistsException;
@@ -30,10 +31,14 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 	public static MemberOfAdmissionCommitteeImpl getMemberService(String loginId, String password)
 			throws AuthenticationfailedException {
 		ValidationService val = (user, pass) -> {
-			User u = udi.readUser(user);
-			if (u != null && u.getPassword().equals(pass) && u.getRole().equalsIgnoreCase("mac")) {
-				return true;
-			} else {
+			try {
+				User u = udi.readUser(user);
+				if (u.getPassword().equals(pass) && u.getRole().equalsIgnoreCase("mac")) {
+					return true;
+				} else {
+					throw new AuthenticationfailedException();
+				}
+			} catch (InvalidUserException e) {
 				throw new AuthenticationfailedException();
 			}
 		};

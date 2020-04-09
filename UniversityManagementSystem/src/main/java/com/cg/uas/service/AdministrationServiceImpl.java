@@ -19,6 +19,7 @@ import com.cg.uas.dao.UserDaoImpl;
 import com.cg.uas.exception.AuthenticationfailedException;
 import com.cg.uas.exception.InvalidDateException;
 import com.cg.uas.exception.InvalidProgramException;
+import com.cg.uas.exception.InvalidUserException;
 import com.cg.uas.exception.NoSuchApplication;
 import com.cg.uas.exception.ProgramAlreadyExistsException;
 
@@ -39,18 +40,24 @@ public class AdministrationServiceImpl implements AdministrationService {
 	}
 
 	private static ValidationService val = (user, pass) -> {
-		User u = udi.readUser(user);
-		if (u != null && u.getPassword().equals(pass) && u.getRole().equalsIgnoreCase("admin")) {
-			logger.info("authenticated");
-			return true;
-		} else {
+		try {
+			User u = udi.readUser(user);
+			if (u.getPassword().equals(pass) && u.getRole().equalsIgnoreCase("admin")) {
+				logger.info("authenticated");
+				return true;
+			} else {
+				logger.info("admin auth error.");
+				throw new AuthenticationfailedException();
+			}
+		} catch (InvalidUserException e) {
 			logger.info("admin auth error.");
 			throw new AuthenticationfailedException();
 		}
 
 	};
 
-	public static AdministrationServiceImpl getAdminService(String loginId, String password) throws AuthenticationfailedException {
+	public static AdministrationServiceImpl getAdminService(String loginId, String password)
+			throws AuthenticationfailedException {
 		PropertyConfigurator.configure("src/main/resources/log4j/log4j.properties");
 		try {
 			boolean auth = val.authenticate(loginId, password);

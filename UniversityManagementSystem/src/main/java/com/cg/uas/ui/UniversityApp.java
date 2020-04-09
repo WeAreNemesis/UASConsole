@@ -1,6 +1,5 @@
 package com.cg.uas.ui;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -8,7 +7,6 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.cg.uas.bean.Application;
-import com.cg.uas.bean.Participant;
 import com.cg.uas.bean.ProgramsOffered;
 import com.cg.uas.bean.ProgramsScheduled;
 import com.cg.uas.dao.ApplicationDaoImpl;
