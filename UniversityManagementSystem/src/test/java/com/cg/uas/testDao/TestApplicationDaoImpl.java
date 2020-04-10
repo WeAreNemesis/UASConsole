@@ -65,7 +65,23 @@ public class TestApplicationDaoImpl {
 	
 	@Test
 	public void testUpdateApplicationForAvailableApplication() throws NoSuchApplication {
-		assertTrue(adi.updateApplication("Siddharth", new Application("1", "Siddharth", LocalDate.parse("1997-12-27"), "12th", 60, 
+		assertTrue(adi.updateApplication("1", new Application("1", "Siddharth", LocalDate.parse("1997-12-27"), "12th", 60, 
 				"Aim to be an Engineer", "siddharth@gmail.com", "A1001", "Accepted", LocalDate.parse("2018-12-27"))));
+	}
+	
+	@Test(expected = NoSuchApplication.class)
+	public void testUpdateApplicationForUnavailableApplication() throws NoSuchApplication {
+		assertTrue(adi.updateApplication("7", new Application("7", "Siddharth", LocalDate.parse("1997-12-27"), "12th", 60, 
+				"Aim to be an Scientist", "siddharth@gmail.com", "A1007", "pending", LocalDate.parse("2018-12-27"))));
+	}
+	
+	@Test
+	public void testDeleteForValidApplication() throws NoSuchApplication {
+		assertTrue(adi.deleteApplication("1"));
+	}
+
+	@Test(expected = NoSuchApplication.class)
+	public void testDeleteFOrInvalidApplication() throws NoSuchApplication {
+		assertTrue(adi.deleteApplication("7"));
 	}
 }
