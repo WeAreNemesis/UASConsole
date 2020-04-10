@@ -7,10 +7,9 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.cg.uas.bean.ProgramsOffered;
 import com.cg.uas.bean.ProgramsScheduled;
 import com.cg.uas.exception.InvalidProgramException;
-import com.cg.uas.service.AdministrationServiceImpl;
+import com.cg.uas.exception.ProgramAlreadyExistsException;
 
 public class ProgramsScheduledDaoImpl implements ProgramsScheduledDao {
 	private static HashMap<String, ProgramsScheduled> programsScheduled = new HashMap<String, ProgramsScheduled>();
@@ -20,11 +19,14 @@ public class ProgramsScheduledDaoImpl implements ProgramsScheduledDao {
 		PropertyConfigurator.configure("src/main/resources/log4j/log4j.properties");
 	}
 
-	
 	@Override
-	public ProgramsScheduled readProgramsScheduled(String scheduledProgramId) {
+	public ProgramsScheduled readProgramsScheduled(String scheduledProgramId) throws InvalidProgramException {
 		ProgramsScheduled scheduled = programsScheduled.get(scheduledProgramId);
-		return scheduled;
+		if (scheduled != null) {
+			return scheduled;
+		} else {
+			throw new InvalidProgramException();
+		}
 	}
 
 	@Override
@@ -34,26 +36,29 @@ public class ProgramsScheduledDaoImpl implements ProgramsScheduledDao {
 	}
 
 	@Override
-	public boolean createProgramsScheduled(ProgramsScheduled scheduled) {
+	public boolean createProgramsScheduled(ProgramsScheduled scheduled) throws ProgramAlreadyExistsException {
 		ProgramsScheduled p = programsScheduled.putIfAbsent(scheduled.getScheduledProgramId(), scheduled);
-		if (p != null) {
+		if (p == null) {
 			return true;
+		} else {
+			throw new ProgramAlreadyExistsException();
 		}
-		return false;
 	}
 
 	@Override
-	public boolean updatePogramsScheduled(String scheduledProgramId, ProgramsScheduled scheduled) {
+	public boolean updatePogramsScheduled(String scheduledProgramId, ProgramsScheduled scheduled)
+			throws InvalidProgramException {
 		ProgramsScheduled p = programsScheduled.put(scheduledProgramId, scheduled);
 		if (p != null) {
 			return true;
+		} else {
+			throw new InvalidProgramException();
 		}
-		return false;
+
 	}
 
 	@Override
-	public boolean deleteProgramsScheduled(String scheduledProgramId) throws InvalidProgramException
-	{
+	public boolean deleteProgramsScheduled(String scheduledProgramId) throws InvalidProgramException {
 		if (programsScheduled.containsKey(scheduledProgramId)) {
 			ProgramsScheduled po = programsScheduled.remove(scheduledProgramId);
 			if (programsScheduled.containsKey(scheduledProgramId)) {

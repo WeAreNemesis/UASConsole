@@ -385,7 +385,6 @@ public class UniversityApp {
 				}
 				break;
 			case 6:
-				loop: {
 					try {
 						System.out.println("Enter the scheduled program id:");
 						String scheduledProgramId = s.next();
@@ -395,7 +394,7 @@ public class UniversityApp {
 						String city = s.next();
 						System.out.println("Enter the start date:");
 						String startDateSc = s.next();
-						System.out.println("Enter the start date:");
+						System.out.println("Enter the end date:");
 						String endDateSc = s.next();
 						System.out.println("Enter sessions per week:");
 						int sessions = s.nextInt();
@@ -407,13 +406,11 @@ public class UniversityApp {
 						}
 					} catch (InvalidDateException e) {
 						System.out.println(e.getMessage());
-						break loop;
 					} catch (ProgramAlreadyExistsException | InputMismatchException e) {
 						System.out.println(e.getMessage());
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
-				}
 				break;
 			case 7:
 				run = false;

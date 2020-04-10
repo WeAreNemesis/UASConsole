@@ -181,8 +181,11 @@ public class AdministrationServiceImpl implements AdministrationService {
 			logger.info("Wrong pair of date was entered.");
 			throw new InvalidDateException();
 		}
-		ProgramsScheduled temp = psdi.readProgramsScheduled(ps.getScheduledProgramId());
-		if (temp == null) {
+		try {
+			ProgramsScheduled temp = psdi.readProgramsScheduled(ps.getScheduledProgramId());
+			logger.info("the program :" + ps.getScheduledProgramId() + "is already scheduled.");
+			throw new ProgramAlreadyExistsException();
+		} catch (InvalidProgramException e) {
 			logger.info("the program :" + ps.getScheduledProgramId() + "is not yet scheduled.");
 			try {
 				ProgramsOffered po = podi.readProgramsOffered(ps.getProgramName());
@@ -200,13 +203,10 @@ public class AdministrationServiceImpl implements AdministrationService {
 					logger.info("the program : " + ps.getProgramName() + " is unavailable in offered programs.");
 					throw new InvalidProgramException();
 				}
-			} catch (InvalidProgramException e) {
-				throw e;
+			} catch (InvalidProgramException e1) {
+				throw e1;
 			}
 
-		} else {
-			logger.info("the program :" + ps.getScheduledProgramId() + "is already scheduled.");
-			throw new ProgramAlreadyExistsException();
 		}
 	}
 }
