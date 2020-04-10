@@ -54,7 +54,7 @@ public class TestUserDaoImpl {
 
 	@Test(expected = UserAlreadyExistsException.class)
 	public void testCreateUserForUserDuplicateCreationFailure() throws UserAlreadyExistsException {
-		assertTrue(udi.createUser(new User("user6", "Pass6", "mac")));
+		assertTrue(udi.createUser(new User("user1", "Pass1", "mac")));
 	}
 
 	@Test
