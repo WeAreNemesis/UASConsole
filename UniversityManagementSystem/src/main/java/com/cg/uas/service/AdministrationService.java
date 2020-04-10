@@ -12,7 +12,9 @@ import com.cg.uas.exception.ProgramAlreadyExistsException;
 
 public interface AdministrationService {
 
-	int addProgram(ProgramsOffered po);
+	int addProgram(ProgramsOffered po) throws ProgramAlreadyExistsException;
+
+	int updateOfferedProgram(ProgramsOffered po) throws InvalidProgramException;
 
 	int removeProgram(String program) throws InvalidProgramException;
 
@@ -22,5 +24,7 @@ public interface AdministrationService {
 
 	void displayAllPrograms();
 
-	boolean addScheduledProgram(ProgramsScheduled ps) throws ProgramAlreadyExistsException, InvalidDateException, InvalidProgramException;
+	boolean addScheduledProgram(ProgramsScheduled ps)
+			throws ProgramAlreadyExistsException, InvalidDateException, InvalidProgramException;
+
 }

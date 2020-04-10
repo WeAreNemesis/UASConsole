@@ -6,6 +6,6 @@ public class ApplicationAlreadyExistsException extends Exception{
 
 	@Override
 	public String getMessage() {
-		return ExceptionDetail.getExceptionDetail("ApplicationAlreadyexists");
+		return ExceptionDetail.getExceptionDetail("ApplicationAlreadyexistsException");
 	}
 }

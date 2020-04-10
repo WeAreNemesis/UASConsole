@@ -23,7 +23,7 @@ public class ParticipantDaoImpl implements ParticipantDao {
 	@Override
 	public Participant readParticipant(String rollNo) throws NoSuchParticipant {
 		Participant p = participants.get(rollNo);
-		if (p == null) {
+		if (p != null) {
 			logger.info("Participant with roll no: " + rollNo + " was found");
 			return p;
 		} else {
@@ -46,7 +46,7 @@ public class ParticipantDaoImpl implements ParticipantDao {
 	}
 
 	@Override
-	public boolean updateParticipant(String rollNo, Participant p) {
+	public boolean updateParticipant(String rollNo, Participant p) throws NoSuchParticipant{
 		if (participants.containsKey(rollNo)) {
 			Participant result = participants.put(rollNo, p);
 
@@ -59,7 +59,7 @@ public class ParticipantDaoImpl implements ParticipantDao {
 			}
 		} else {
 			logger.info("Participant with roll no: " + rollNo + " not found");
-			return false;
+			throw new NoSuchParticipant();
 		}
 
 	}
@@ -73,7 +73,7 @@ public class ParticipantDaoImpl implements ParticipantDao {
 				return false;
 			} else {
 				logger.info("Participant with roll no: " + p.getRollNo() + " was deleted.");
-				return false;
+				return true;
 			}
 		} else {
 			logger.info("Participant with roll no: " + rollNo + " not found");

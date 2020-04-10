@@ -258,14 +258,14 @@ public class UniversityApp {
 		}
 		boolean run = true;
 		while (run) {
-			System.out.println("1.Add/update a new Offered Program:");
+			System.out.println("0.Add a new Offered program:");
+			System.out.println("1.Update a new Offered Program:");
 			System.out.println("2.View Offered & Scheduled Programs:");
 			System.out.println("3.Delete an Offered/Scheduled program:");
 			System.out.println("4.Generate report by time period:");
 			System.out.println("5.Generate report by status:");
 			System.out.println("6.Add a scheduled program:");
 			System.out.println("7.logout");
-
 			int choice;
 
 			try {
@@ -276,8 +276,35 @@ public class UniversityApp {
 
 			s.nextLine();
 			switch (choice) {
+			case 0:
+				System.out.println("Enter the program name to add:");
+				String programNameToAdd = s.nextLine();
+				System.out.println("Enter the description:");
+				String descriptionToAdd = s.nextLine();
+				System.out.println("Enter the eligibility criteria:");
+				String applicantEligibilityToAdd = s.nextLine();
+				System.out.println("Enter the degree certificate offered:");
+				String degreeCertificateOfferedToAdd = s.nextLine();
+				System.out.println("Enter the duration in months:");
+				try {
+					int durationToAdd = s.nextInt();
+					ProgramsOffered po = new ProgramsOffered(programNameToAdd.trim(), descriptionToAdd,
+							applicantEligibilityToAdd, durationToAdd, degreeCertificateOfferedToAdd);
+					as.addProgram(po);
+
+				} catch (InputMismatchException e) {
+					System.out.println("Enter duration only in months only.");
+				} catch (ProgramAlreadyExistsException e) {
+					System.out.println(e.getMessage());
+				} catch (Exception e) {
+					System.out.println("Unknown error occured.");
+				}
+
+				as.displayAllPrograms();
+
+				break;
 			case 1:
-				System.out.println("Enter the program name:");
+				System.out.println("Enter the program name to update:");
 				String programName = s.nextLine();
 				System.out.println("Enter the description:");
 				String description = s.nextLine();
@@ -290,10 +317,14 @@ public class UniversityApp {
 					int duration = s.nextInt();
 					ProgramsOffered po = new ProgramsOffered(programName.trim(), description, applicantEligibility,
 							duration, degreeCertificateOffered);
-					as.addProgram(po);
+					as.updateOfferedProgram(po);
 
 				} catch (InputMismatchException e) {
 					System.out.println("Enter duration only in months only.");
+				} catch (InvalidProgramException e) {
+					System.out.println(e.getMessage());
+				} catch (Exception e) {
+					System.out.println("Unknown error occured.");
 				}
 
 				as.displayAllPrograms();

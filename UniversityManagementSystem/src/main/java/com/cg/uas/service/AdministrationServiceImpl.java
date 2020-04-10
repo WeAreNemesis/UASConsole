@@ -71,30 +71,31 @@ public class AdministrationServiceImpl implements AdministrationService {
 	}
 
 	@Override
-	public int addProgram(ProgramsOffered po) {
+	public int addProgram(ProgramsOffered po) throws ProgramAlreadyExistsException {
 		boolean result = false;
-		ProgramsOffered temp;
 		try {
-			temp = podi.readProgramsOffered(po.getProgramName());
-			if (temp != null) {
-				logger.info("program already exists so update will proceed.");
-				result = podi.updateProgramsOffered(po.getProgramName(), po);
-			}
-		} catch (InvalidProgramException e) {
-			try {
-				logger.info("program already doesn't exists so creation will proceed.");
-				result = podi.createProgramsOffered(po);
-			} catch (ProgramAlreadyExistsException e1) {
+			result = podi.createProgramsOffered(po);
+			if (result) {
+				return 1;
+			} else {
 				return 0;
 			}
+		} catch (ProgramAlreadyExistsException e) {
+			throw e;
 		}
+	}
 
-		if (result) {
-			logger.info("program added successfully.");
-			return 1;
-		} else {
-			logger.info("program addition failed.");
-			return 0;
+	@Override
+	public int updateOfferedProgram(ProgramsOffered po) throws InvalidProgramException {
+		try {
+			boolean result = podi.updateProgramsOffered(po.getProgramName(), po);
+			if (result) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} catch (InvalidProgramException e) {
+			throw e;
 		}
 	}
 
@@ -121,6 +122,10 @@ public class AdministrationServiceImpl implements AdministrationService {
 					boolean result = psdi.deleteProgramsScheduled(program);
 					if (result) {
 						logger.info("scheduled program deleted successfully.");
+						return 1;
+					} else {
+						logger.info("scheduled program failed to delete.");
+						return 0;
 					}
 				} catch (InvalidProgramException e2) {
 					throw e2;
@@ -178,16 +183,21 @@ public class AdministrationServiceImpl implements AdministrationService {
 		}
 		ProgramsScheduled temp = psdi.readProgramsScheduled(ps.getScheduledProgramId());
 		if (temp == null) {
+			logger.info("the program :" + ps.getScheduledProgramId() + "is not yet scheduled.");
 			try {
 				ProgramsOffered po = podi.readProgramsOffered(ps.getProgramName());
 				if (po != null) {
+					logger.info("the program : " + ps.getProgramName() + " is available in offered programs.");
 					boolean result = psdi.createProgramsScheduled(ps);
 					if (result) {
+						logger.info("The program : " + ps.getScheduledProgramId() + " was scheduled.");
 						return true;
 					} else {
+						logger.info("The program : " + ps.getScheduledProgramId() + " failed to schedule.");
 						return false;
 					}
 				} else {
+					logger.info("the program : " + ps.getProgramName() + " is unavailable in offered programs.");
 					throw new InvalidProgramException();
 				}
 			} catch (InvalidProgramException e) {
@@ -195,6 +205,7 @@ public class AdministrationServiceImpl implements AdministrationService {
 			}
 
 		} else {
+			logger.info("the program :" + ps.getScheduledProgramId() + "is already scheduled.");
 			throw new ProgramAlreadyExistsException();
 		}
 	}

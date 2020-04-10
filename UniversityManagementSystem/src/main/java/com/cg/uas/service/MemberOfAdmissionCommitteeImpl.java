@@ -108,7 +108,12 @@ public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommitte
 						return false;
 					}
 				} catch (ParticipantAlreadyExistsException e) {
-					return pdi.updateParticipant(p.getRollNo(), p);
+					try {
+						return pdi.updateParticipant(p.getRollNo(), p);
+					} catch (NoSuchParticipant e1) {
+						return false;
+					}
+
 				}
 			} else if (result) {
 				return true;

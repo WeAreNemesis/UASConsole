@@ -7,7 +7,6 @@ import com.cg.uas.bean.ProgramsScheduled;
 import com.cg.uas.dao.ApplicationDaoImpl;
 import com.cg.uas.dao.ProgramsScheduledDaoImpl;
 import com.cg.uas.exception.ApplicationAlreadyExistsException;
-import com.cg.uas.exception.ApplicationFailedException;
 import com.cg.uas.exception.InvalidProgramException;
 import com.cg.uas.exception.NoProgramsAvailableException;
 import com.cg.uas.exception.NoSuchApplication;
