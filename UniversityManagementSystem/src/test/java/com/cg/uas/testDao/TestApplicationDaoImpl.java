@@ -12,11 +12,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.cg.uas.bean.Application;
-import com.cg.uas.bean.User;
 import com.cg.uas.dao.ApplicationDao;
 import com.cg.uas.dao.ApplicationDaoImpl;
 import com.cg.uas.exception.ApplicationAlreadyExistsException;
-import com.cg.uas.exception.InvalidUserException;
 import com.cg.uas.exception.NoSuchApplication;
 
 public class TestApplicationDaoImpl {

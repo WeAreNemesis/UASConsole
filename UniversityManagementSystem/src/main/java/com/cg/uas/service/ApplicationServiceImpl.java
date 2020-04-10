@@ -2,6 +2,9 @@ package com.cg.uas.service;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import com.cg.uas.bean.Application;
 import com.cg.uas.bean.ProgramsScheduled;
 import com.cg.uas.dao.ApplicationDaoImpl;
@@ -17,6 +20,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	private static ProgramsScheduledDaoImpl psdi = new ProgramsScheduledDaoImpl();
 	private static ApplicationDaoImpl adi = new ApplicationDaoImpl();
+	private static final Logger logger = Logger.getLogger(ApplicationServiceImpl.class);
+	
+	static {
+		PropertyConfigurator.configure("src/main/resources/log4j/log4j.properties");
+	}
 
 	@Override
 	public ArrayList<ProgramsScheduled> getScheduledProgramsList() throws NoProgramsAvailableException {
