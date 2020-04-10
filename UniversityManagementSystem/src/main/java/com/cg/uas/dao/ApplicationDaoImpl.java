@@ -11,7 +11,6 @@ import org.apache.log4j.PropertyConfigurator;
 
 import com.cg.uas.bean.Application;
 import com.cg.uas.exception.ApplicationAlreadyExistsException;
-import com.cg.uas.exception.InvalidProgramException;
 import com.cg.uas.exception.NoSuchApplication;
 
 public class ApplicationDaoImpl implements ApplicationDao {
