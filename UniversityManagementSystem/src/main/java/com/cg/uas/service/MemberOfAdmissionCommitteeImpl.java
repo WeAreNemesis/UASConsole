@@ -10,7 +10,7 @@ import com.cg.uas.bean.Participant;
 import com.cg.uas.bean.User;
 import com.cg.uas.dao.ApplicationDaoImpl;
 import com.cg.uas.dao.ParticipantDaoImpl;
-import com.cg.uas.dao.UserDaoImpl;
+import com.cg.uas.dao.UserDaoImpl; 
 import com.cg.uas.exception.AuthenticationfailedException;
 import com.cg.uas.exception.InvalidUserException;
 import com.cg.uas.exception.NoSuchApplication; 
