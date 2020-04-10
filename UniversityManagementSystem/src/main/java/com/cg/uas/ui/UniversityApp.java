@@ -385,32 +385,34 @@ public class UniversityApp {
 				}
 				break;
 			case 6:
-					try {
-						System.out.println("Enter the scheduled program id:");
-						String scheduledProgramId = s.next();
-						System.out.println("Enter the program name:");
-						String scheduledProgramName = s.next();
-						System.out.println("Enter the city:");
-						String city = s.next();
-						System.out.println("Enter the start date:");
-						String startDateSc = s.next();
-						System.out.println("Enter the end date:");
-						String endDateSc = s.next();
-						System.out.println("Enter sessions per week:");
-						int sessions = s.nextInt();
-						boolean result = as
-								.addScheduledProgram(new ProgramsScheduled(scheduledProgramId, scheduledProgramName,
-										city, LocalDate.parse(startDateSc), LocalDate.parse(endDateSc), sessions));
-						if (result) {
-							System.out.println("Program scheduled successfully");
-						}
-					} catch (InvalidDateException e) {
-						System.out.println(e.getMessage());
-					} catch (ProgramAlreadyExistsException | InputMismatchException e) {
-						System.out.println(e.getMessage());
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
+				try {
+					System.out.println("Enter the scheduled program id:");
+					String scheduledProgramId = s.next();
+					System.out.println("Enter the program name:");
+					String scheduledProgramName = s.next();
+					System.out.println("Enter the city:");
+					String city = s.next();
+					System.out.println("Enter the start date:");
+					String startDateSc = s.next();
+					System.out.println("Enter the end date:");
+					String endDateSc = s.next();
+					System.out.println("Enter sessions per week:");
+					int sessions = s.nextInt();
+					boolean result = as
+							.addScheduledProgram(new ProgramsScheduled(scheduledProgramId, scheduledProgramName, city,
+									LocalDate.parse(startDateSc), LocalDate.parse(endDateSc), sessions));
+					if (result) {
+						System.out.println("Program scheduled successfully");
 					}
+				} catch (InvalidDateException e) {
+					System.out.println(e.getMessage());
+				} catch (ProgramAlreadyExistsException | InputMismatchException e) {
+					System.out.println(e.getMessage());
+				} catch (DateTimeParseException e) {
+					System.out.println("Improper date entered.");
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 				break;
 			case 7:
 				run = false;

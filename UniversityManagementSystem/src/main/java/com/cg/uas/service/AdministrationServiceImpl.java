@@ -183,10 +183,10 @@ public class AdministrationServiceImpl implements AdministrationService {
 		}
 		try {
 			ProgramsScheduled temp = psdi.readProgramsScheduled(ps.getScheduledProgramId());
-			logger.info("the program :" + ps.getScheduledProgramId() + "is already scheduled.");
+			logger.info("the program :" + ps.getScheduledProgramId() + " is already scheduled.");
 			throw new ProgramAlreadyExistsException();
 		} catch (InvalidProgramException e) {
-			logger.info("the program :" + ps.getScheduledProgramId() + "is not yet scheduled.");
+			logger.info("the program :" + ps.getScheduledProgramId() + " is not yet scheduled.");
 			try {
 				ProgramsOffered po = podi.readProgramsOffered(ps.getProgramName());
 				if (po != null) {
