@@ -20,6 +20,7 @@ public class ProgramsScheduledDaoImpl implements ProgramsScheduledDao {
 		PropertyConfigurator.configure("src/main/resources/log4j/log4j.properties");
 	}
 
+	
 	@Override
 	public ProgramsScheduled readProgramsScheduled(String scheduledProgramId) {
 		ProgramsScheduled scheduled = programsScheduled.get(scheduledProgramId);
