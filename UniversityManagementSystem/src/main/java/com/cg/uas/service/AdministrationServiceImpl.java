@@ -27,13 +27,29 @@ public class AdministrationServiceImpl implements AdministrationService {
 
 	private static AdministrationServiceImpl asi = null;
 	private static UserDaoImpl udi = new UserDaoImpl();
-	private static ProgramsOfferedDaoImpl podi = new ProgramsOfferedDaoImpl();
-	private static ProgramsScheduledDaoImpl psdi = new ProgramsScheduledDaoImpl();
-	private static ApplicationDaoImpl adi = new ApplicationDaoImpl();
+	private ProgramsOfferedDaoImpl podi = new ProgramsOfferedDaoImpl();
+	private ProgramsScheduledDaoImpl psdi = new ProgramsScheduledDaoImpl();
+	private ApplicationDaoImpl adi = new ApplicationDaoImpl();
 	private static final Logger logger = Logger.getLogger(AdministrationServiceImpl.class);
 
 	static {
 		PropertyConfigurator.configure("src/main/resources/log4j/log4j.properties");
+	}
+
+	public static void setUdi(UserDaoImpl udi) {
+		AdministrationServiceImpl.udi = udi;
+	}
+
+	public void setPodi(ProgramsOfferedDaoImpl podi) {
+		this.podi = podi;
+	}
+
+	public void setPsdi(ProgramsScheduledDaoImpl psdi) {
+		this.psdi = psdi;
+	}
+
+	public void setAdi(ApplicationDaoImpl adi) {
+		this.adi = adi;
 	}
 
 	private AdministrationServiceImpl() {
@@ -50,7 +66,7 @@ public class AdministrationServiceImpl implements AdministrationService {
 				throw new AuthenticationfailedException();
 			}
 		} catch (InvalidUserException e) {
-			logger.info("admin auth error.");
+			logger.info("admin auth erro.");
 			throw new AuthenticationfailedException();
 		}
 

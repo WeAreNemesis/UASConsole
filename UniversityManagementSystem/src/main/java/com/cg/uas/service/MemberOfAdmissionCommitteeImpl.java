@@ -10,22 +10,34 @@ import com.cg.uas.bean.Participant;
 import com.cg.uas.bean.User;
 import com.cg.uas.dao.ApplicationDaoImpl;
 import com.cg.uas.dao.ParticipantDaoImpl;
-import com.cg.uas.dao.UserDaoImpl; 
+import com.cg.uas.dao.UserDaoImpl;
 import com.cg.uas.exception.AuthenticationfailedException;
 import com.cg.uas.exception.InvalidUserException;
-import com.cg.uas.exception.NoSuchApplication; 
+import com.cg.uas.exception.NoSuchApplication;
 import com.cg.uas.exception.NoSuchParticipant;
 import com.cg.uas.exception.ParticipantAlreadyExistsException;
 
 public class MemberOfAdmissionCommitteeImpl implements MemberOfAdmissionCommittee {
 	private static MemberOfAdmissionCommitteeImpl credentials = null;
 	private static UserDaoImpl udi = new UserDaoImpl();
-	private static ApplicationDaoImpl adi = new ApplicationDaoImpl();
-	private static ParticipantDaoImpl pdi = new ParticipantDaoImpl();
+	private ApplicationDaoImpl adi = new ApplicationDaoImpl();
+	private ParticipantDaoImpl pdi = new ParticipantDaoImpl();
 	private static int rollNo = 1003;
 
 	private MemberOfAdmissionCommitteeImpl() {
 
+	}
+
+	public static void setUdi(UserDaoImpl udi) {
+		MemberOfAdmissionCommitteeImpl.udi = udi;
+	}
+
+	public void setAdi(ApplicationDaoImpl adi) {
+		this.adi = adi;
+	}
+
+	public void setPdi(ParticipantDaoImpl pdi) {
+		this.pdi = pdi;
 	}
 
 	public static MemberOfAdmissionCommitteeImpl getMemberService(String loginId, String password)
